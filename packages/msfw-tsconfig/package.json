@@ -1,0 +1,24 @@
+{
+  "name": "@msfw/tsconfig",
+  "version": "1.0.0",
+  "main": "",
+  "license": "MIT",
+  "types": "types/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xingbangzhou/msfw.git",
+    "directory": "packages/msfw-tsconfig"
+  },
+  "maintainers": [
+    "xingbangzhou"
+  ],
+  "dependencies": {
+    "typescript-plugin-css-modules": "^5.0.2"
+  },
+  "scripts": {
+    "release": "npm publish --access public"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

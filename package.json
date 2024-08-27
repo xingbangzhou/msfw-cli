@@ -1,0 +1,25 @@
+{
+  "name": "msfw",
+  "version": "1.0.0",
+  "description": "MSFW",
+  "repository": "https://github.com/xingbangzhou/msfw.git",
+  "author": "zhouxingbang <zhouxingbang92@163.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "release": "pnpm --filter \"@msfw/*\" release",
+    "prepare": "husky install",
+    "lint": "eslint --fix --ext .ts,.tsx ."
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.4.0",
+    "@commitlint/config-conventional": "^19.2.2",
+    "@msfw/eslintrc": "workspace:^",
+    "husky": "^9.1.5"
+  }
+}

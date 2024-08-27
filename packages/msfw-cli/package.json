@@ -1,0 +1,39 @@
+{
+  "name": "@msfw/cli",
+  "version": "1.0.0",
+  "private": false,
+  "license": "MIT",
+  "author": "Zhou xingbang <zhouxingbang92@163.com>",
+  "keywords": [
+    "webpack5",
+    "typescript5"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xingbangzhou/msfw.git",
+    "directory": "packages/msfw-cli"
+  },
+  "maintainers": [
+    "xingbangzhou"
+  ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "msfw": "./dist/bin/msfw.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepack": "pnpm build"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "cosmiconfig": "^9.0.0",
+    "cosmiconfig-typescript-loader": "^5.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
