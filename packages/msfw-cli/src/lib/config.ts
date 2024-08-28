@@ -5,33 +5,32 @@ import {isFunction, isString} from './utils'
 import path from 'path'
 import {projectRoot} from './paths'
 import {log} from './logger'
+import type {MsfwConfig} from '../types/config'
+import {LowercaseName, UppercaseName} from './constants'
 
-const moduleName = 'msfw'
-const explorer = cosmiconfigSync(moduleName, {
-  searchPlaces: [`${moduleName}.config.ts`, `${moduleName}.config.js`, `${moduleName}.config.cjs`],
+const explorer = cosmiconfigSync(LowercaseName, {
+  searchPlaces: [`${LowercaseName}.config.ts`, `${LowercaseName}.config.js`, `${LowercaseName}.config.cjs`],
   loaders: {
     '.ts': TypeScriptLoader(),
   },
 })
 
-function getConfigPath(context: MsfwContext) {
+export function getConfigPath(context: MsfwContext) {
   const config = context.options.config
   if (config && isString(config)) {
     return path.resolve(projectRoot, config)
   } else {
-    const packageJsonPath = path.join(projectRoot, 'package.json')
-    const packageJson = require(packageJsonPath)
-
-    const pkMsfwConfig = packageJson.msfwConfig
+    const pkMsfwConfig = context.appPackageJson.msfwConfig
     if (pkMsfwConfig && isString(pkMsfwConfig)) {
       return path.resolve(projectRoot, pkMsfwConfig)
     } else {
       const result = explorer.search(projectRoot)
 
       if (result === null) {
-        throw new Error(
-          `${moduleName}: Config file not found. check if file exists at root (${moduleName}.config.ts, ${moduleName}.config.js)`,
+        log(
+          `${UppercaseName}: Config file not found. check if file exists at root (${LowercaseName}.config.ts, ${LowercaseName}.config.js)`,
         )
+        return ''
       }
 
       return result.filepath
@@ -39,19 +38,16 @@ function getConfigPath(context: MsfwContext) {
   }
 }
 
-function getConfigAsObject(context: MsfwContext) {
-  const configFilePath = getConfigPath(context)
-  log('Config file path resolved to: ', configFilePath)
+export function loadConfig(context: MsfwContext): MsfwConfig {
+  const configFilePath = context.configPath
   const result = explorer.load(configFilePath)
 
-  const configAsObject = isFunction(result?.config) ? result.config(context) : result?.config
+  const config = isFunction(result?.config) ? result.config(context) : result?.config
 
-  if (!configAsObject) {
-    throw new Error("msfw: Config function didn't return a config object.")
+  if (!config) {
+    log(`${UppercaseName}: Config function didn't return a config object.`)
+    return {}
   }
-  return configAsObject
-}
 
-export function loadConfig(context: MsfwContext) {
-  const configAsObject = getConfigAsObject(context)
+  return config
 }
