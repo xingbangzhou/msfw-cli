@@ -53,21 +53,7 @@ export class WpCommon {
       alias: {
         src: srcPath,
       },
-      extensions: [
-        '.js',
-        '.jsx',
-        '.mjs',
-        '.ts',
-        '.tsx',
-        '.css',
-        '.less',
-        '.scss',
-        '.sass',
-        '.json',
-        '.wasm',
-        '.vue',
-        '.svg',
-      ],
+      extensions: ['.js', '.jsx', '.mjs', '.ts', '.tsx', '.css', '.scss', '.sass', '.json', '.wasm', '.vue', '.svg'],
     }
     // experiments
     const experiments: Configuration['experiments'] = {

@@ -2,6 +2,7 @@ import {Configuration} from 'webpack'
 import {WebpackChain} from './webpack-config'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin'
+import {resolveProject} from '../../paths'
 
 const cssRegex = /\.css$/
 const cssModuleRegex = /\.module\.css$/
@@ -100,8 +101,31 @@ export default class WpStyle {
       {
         loader: require.resolve('css-loader'),
         options: {
-          modules: modules ? {localIdentName} : modules,
-          esModule: modules,
+          modules: modules
+            ? {
+                // mode: 'local',
+                // auto: true,
+                // exportGlobals: true,
+                localIdentName,
+                // localIdentContext: resolveProject('src'),
+                // localIdentHashSalt: 'my-custom-hash',
+                // namedExport: false,
+                // getJSON: ({
+                //   resourcePath,
+                //   imports,
+                //   exports,
+                //   replacements,
+                // }: {
+                //   resourcePath: string
+                //   imports: object[]
+                //   exports: object[]
+                //   replacements: object[]
+                // }) => {
+                //   console.log('ffffffffffff')
+                //   console.log({resourcePath, imports, exports, replacements})
+                // },
+              }
+            : modules,
         },
       },
       {

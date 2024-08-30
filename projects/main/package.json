@@ -12,7 +12,9 @@
   },
   "devDependencies": {
     "@msfw/cli": "workspace:^",
-    "@msfw/tsconfig": "workspace:^"
+    "@msfw/tsconfig": "workspace:^",
+    "@types/node": "^22.5.1",
+    "typescript-plugin-css-modules": "^5.1.0"
   },
   "dependencies": {
     "@babel/runtime": "^7.25.4",

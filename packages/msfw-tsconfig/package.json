@@ -12,13 +12,13 @@
   "maintainers": [
     "xingbangzhou"
   ],
-  "dependencies": {
-    "typescript-plugin-css-modules": "^5.0.2"
-  },
   "scripts": {
     "release": "npm publish --access public"
   },
   "publishConfig": {
     "access": "public"
+  },
+  "devDependencies": {
+    "typescript-plugin-css-modules": "^5.1.0"
   }
 }
