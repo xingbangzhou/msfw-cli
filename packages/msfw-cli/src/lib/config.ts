@@ -1,53 +1,62 @@
 import {cosmiconfigSync} from 'cosmiconfig'
 import {TypeScriptLoader} from 'cosmiconfig-typescript-loader'
 import {MsfwContext} from '../types'
-import {isFunction, isString} from './utils'
+import {deepMergeWidthArray, isFunction, isString} from './utils'
 import path from 'path'
 import {projectRoot} from './paths'
 import {log} from './logger'
 import type {MsfwConfig} from '../types/config'
-import {LowercaseName, UppercaseName} from './constants'
+import {MsfwName, MsfwBigName} from './constants'
 
-const explorer = cosmiconfigSync(LowercaseName, {
-  searchPlaces: [`${LowercaseName}.config.ts`, `${LowercaseName}.config.js`, `${LowercaseName}.config.cjs`],
+const DEFAULT_CONFIG: MsfwConfig = {
+  devServer: {
+    host: '0.0.0.0',
+    port: 3000,
+    open: true,
+    hot: true,
+  },
+}
+
+const explorer = cosmiconfigSync(MsfwName, {
+  searchPlaces: [`${MsfwName}.config.ts`, `${MsfwName}.config.js`, `${MsfwName}.config.cjs`],
   loaders: {
     '.ts': TypeScriptLoader(),
   },
 })
 
-export function getConfigPath(context: MsfwContext) {
-  const config = context.options.config
+export function getConfigPath(config?: string) {
   if (config && isString(config)) {
     return path.resolve(projectRoot, config)
   } else {
-    const pkMsfwConfig = context.appPackageJson.msfwConfig
-    if (pkMsfwConfig && isString(pkMsfwConfig)) {
-      return path.resolve(projectRoot, pkMsfwConfig)
-    } else {
-      const result = explorer.search(projectRoot)
-
-      if (result === null) {
-        log(
-          `${UppercaseName}: Config file not found. check if file exists at root (${LowercaseName}.config.ts, ${LowercaseName}.config.js)`,
-        )
-        return ''
-      }
-
-      return result.filepath
+    const result = explorer.search(projectRoot)
+    if (result === null) {
+      log(
+        `${MsfwBigName}: Config file not found. check if file exists at root (${MsfwName}.config.ts, ${MsfwName}.config.js)`,
+      )
+      return ''
     }
+
+    return result.filepath
   }
 }
 
-export function loadConfig(context: MsfwContext): MsfwConfig {
+function getConfigAsObject(context: MsfwContext): MsfwConfig {
   const configFilePath = context.configPath
   const result = explorer.load(configFilePath)
 
   const config = isFunction(result?.config) ? result.config(context) : result?.config
 
   if (!config) {
-    log(`${UppercaseName}: Config function didn't return a config object.`)
     return {}
   }
 
   return config
+}
+
+export function loadMsfwConfig(context: MsfwContext): MsfwConfig {
+  const configAsObject = getConfigAsObject(context)
+
+  const msfwConfig = deepMergeWidthArray({}, DEFAULT_CONFIG, configAsObject)
+
+  return msfwConfig
 }

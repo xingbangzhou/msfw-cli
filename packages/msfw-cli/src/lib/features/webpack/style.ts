@@ -1,6 +1,5 @@
-import {Configuration, RuleSetUseItem} from 'webpack'
-import WebpackConfig from './webpack-config'
-import {getMsfwContext} from '../../context'
+import {Configuration} from 'webpack'
+import {WebpackChain} from './webpack-config'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin'
 
@@ -10,15 +9,15 @@ const sassRegex = /\.(scss|sass)$/
 const sassModuleRegex = /\.module\.(scss|sass)$/
 
 export default class WpStyle {
-  protected localIdentName = ''
-  protected isDev = false
-
-  setup(webpackConfig: WebpackConfig) {
-    const ctx = getMsfwContext()
-    const isDev = (this.isDev = ctx.isDev)
+  setup(webpackChain: WebpackChain) {
+    const ctx = webpackChain.context
+    const isDev = ctx.isDev
     const assetsDir = ctx.assetsDir
 
-    this.localIdentName = isDev ? '[path][name]-[local]-[hash:base64:5]' : '[local]-[hash:base64:5]'
+    const localIdentName = isDev ? '[path][name]-[local]-[hash:base64:5]' : '[local]-[hash:base64:5]'
+
+    const loaders = this.getLoaders(isDev, localIdentName)
+    const moduleLoaders = this.getLoaders(isDev, localIdentName, true)
 
     const config: Configuration = {
       module: {
@@ -26,39 +25,37 @@ export default class WpStyle {
           {
             test: cssRegex,
             exclude: cssModuleRegex,
-            use: [...this.getLoaders()],
+            use: [...loaders],
           },
           {
             test: cssModuleRegex,
-            use: [...this.getLoaders(true)],
+            use: [...moduleLoaders],
           },
           {
             test: sassRegex,
             exclude: sassModuleRegex,
             use: [
-              ...this.getLoaders(false, [
-                {
-                  loader: require.resolve('sass-loader'),
-                  options: {
-                    implementation: require('sass'),
-                    sourceMap: isDev,
-                  },
+              ...loaders,
+              {
+                loader: require.resolve('sass-loader'),
+                options: {
+                  implementation: require('sass'),
+                  sourceMap: isDev,
                 },
-              ]),
+              },
             ],
           },
           {
             test: sassModuleRegex,
             use: [
-              ...this.getLoaders(true, [
-                {
-                  loader: require.resolve('sass-loader'),
-                  options: {
-                    implementation: require('sass'),
-                    sourceMap: isDev,
-                  },
+              ...moduleLoaders,
+              {
+                loader: require.resolve('sass-loader'),
+                options: {
+                  implementation: require('sass'),
+                  sourceMap: isDev,
                 },
-              ]),
+              },
             ],
           },
         ],
@@ -91,21 +88,20 @@ export default class WpStyle {
       ]
     }
 
-    webpackConfig.merge(config)
+    webpackChain.merge(config)
   }
 
-  private getLoaders(modules = false, rules?: RuleSetUseItem[]) {
-    const localIdentName = this.localIdentName
-
+  private getLoaders(isDev: boolean, localIdentName: string, modules = false) {
     return [
       {
-        loader: this.isDev ? require.resolve('style-loader') : MiniCssExtractPlugin.loader,
+        loader: isDev ? require.resolve('style-loader') : MiniCssExtractPlugin.loader,
         options: {},
       },
       {
         loader: require.resolve('css-loader'),
         options: {
           modules: modules ? {localIdentName} : modules,
+          esModule: modules,
         },
       },
       {
@@ -116,7 +112,6 @@ export default class WpStyle {
           },
         },
       },
-      ...(rules || []),
     ]
   }
 }

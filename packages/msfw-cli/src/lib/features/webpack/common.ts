@@ -1,40 +1,22 @@
 import type {Configuration} from 'webpack'
-import {getMsfwContext} from '../../context'
 import {resolveProject} from '../../paths'
-import WebpackConfig from './webpack-config'
+import {WebpackChain} from './webpack-config'
 
 export class WpCommon {
-  setup(webpackConfig: WebpackConfig) {
-    const {target, cache, entry, output, resolve, experiments, stats} = this
-
-    webpackConfig.merge({
-      target,
-      cache,
-      entry,
-      output,
-      resolve,
-      experiments,
-      stats,
-    })
-  }
-
-  protected get target(): Configuration['target'] {
-    return ['web', 'es5']
-  }
-
-  protected get cache(): Configuration['cache'] {
-    const ctx = getMsfwContext()
-
+  setup(webpackChain: WebpackChain) {
+    const ctx = webpackChain.context
+    const options = ctx.options
+    const isDev = ctx.isDev
+    // target
+    const target: Configuration['target'] = ['web', 'es5']
+    // cache
     const buildDependenciesConfigs = [__filename]
-
     const configPath = ctx.configPath
     if (configPath) {
       buildDependenciesConfigs.push(configPath)
     }
-
-    const name = `${ctx.isDev ? 'development' : ''}-${ctx.appPackageJson.version}-${ctx.options?.env}`
-
-    return {
+    const name = `${isDev ? 'development' : ''}-${ctx.appPackageJson.version}-${options?.env}`
+    const cache: Configuration['cache'] = {
       name: name,
       type: 'filesystem',
       cacheDirectory: ctx.cacheDirPath,
@@ -42,42 +24,31 @@ export class WpCommon {
         config: buildDependenciesConfigs,
       },
     }
-  }
-
-  protected get entry(): Configuration['entry'] {
-    return {
-      index: getMsfwContext().defaultIndexPath,
+    // entry
+    const entry: Configuration['entry'] = {
+      index: ctx.appIndexPath,
     }
-  }
-
-  protected get output(): Configuration['output'] {
-    const ctx = getMsfwContext()
-
-    const environment = {
-      arrowFunction: false,
-      bigIntLiteral: false,
-      const: false,
-      destructuring: false,
-      forOf: false,
-      dynamicImport: false,
-      module: false,
-    }
-
+    // output
     const assetsDir = ctx.assetsDir
-
-    return {
+    const output: Configuration['output'] = {
       clean: true,
-      path: ctx.defaultDistPath,
+      path: ctx.appDistPath,
       publicPath: 'auto',
       filename: `${assetsDir}/js/[name].[contenthash:8].js`,
       assetModuleFilename: `${assetsDir}/[name].[contenthash:8][ext][query]`,
-      environment,
+      environment: {
+        arrowFunction: false,
+        bigIntLiteral: false,
+        const: false,
+        destructuring: false,
+        forOf: false,
+        dynamicImport: false,
+        module: false,
+      },
     }
-  }
-
-  protected get resolve(): Configuration['resolve'] {
-    const srcPath = resolveProject('src')
-    return {
+    // resolve
+    const srcPath = ctx.appSrcPath
+    const resolve: Configuration['resolve'] = {
       modules: ['node_modules', resolveProject('node_modules'), srcPath],
       alias: {
         src: srcPath,
@@ -96,23 +67,28 @@ export class WpCommon {
         '.wasm',
         '.vue',
         '.svg',
-        '.svga',
       ],
     }
-  }
-
-  protected get experiments(): Configuration['experiments'] {
-    return {
+    // experiments
+    const experiments: Configuration['experiments'] = {
       topLevelAwait: true,
       backCompat: true,
       asyncWebAssembly: true,
       syncWebAssembly: true,
     }
-  }
-
-  protected get stats(): Configuration['stats'] {
-    return {
+    // stats
+    const stats: Configuration['stats'] = {
       preset: 'errors-warnings',
     }
+
+    webpackChain.merge({
+      target,
+      cache,
+      entry,
+      output,
+      resolve,
+      experiments,
+      stats,
+    })
   }
 }

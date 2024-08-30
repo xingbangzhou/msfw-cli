@@ -1,8 +1,8 @@
 import {Configuration} from 'webpack'
-import WebpackConfig from './webpack-config'
+import {WebpackChain} from './webpack-config'
 
 export default class WpAssetModules {
-  setup(webpackConfig: WebpackConfig) {
+  setup(WebpackChain: WebpackChain) {
     const config: Configuration = {
       module: {
         rules: [
@@ -43,6 +43,6 @@ export default class WpAssetModules {
       },
     }
 
-    webpackConfig.merge(config)
+    WebpackChain.merge(config)
   }
 }

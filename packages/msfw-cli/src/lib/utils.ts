@@ -1,3 +1,5 @@
+import mergeWith from 'lodash/mergeWith'
+
 export function isFunction(value: any): value is (...args: any[]) => any {
   return typeof value === 'function'
 }
@@ -12,4 +14,12 @@ export function isString(value: any): value is string {
 
 export function isBoolean(value: any): value is boolean {
   return typeof value === 'boolean'
+}
+
+export function deepMergeWidthArray(dest: any, ...src: any) {
+  return mergeWith(dest, ...src, (x: any, y: any) => {
+    if (isArray(x)) {
+      return x.concat(y)
+    }
+  })
 }

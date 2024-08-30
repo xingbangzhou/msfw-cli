@@ -29,6 +29,11 @@ program
     msfw('build', options)
   })
 
-program.command('serve')
+program
+  .command('serve')
+  .description('正式环境调试')
+  .action(() => {
+    msfw('serve', {})
+  })
 
 program.parse(process.argv)

@@ -1,37 +1,10 @@
+import path from 'path'
 import type {MsfwContext, Options} from '../types'
 import {getConfigPath} from './config'
 import {isProjectFileExist, resolveProject} from './paths'
 import fs from 'fs'
 
-const _msfwcontext: MsfwContext = {
-  options: {},
-
-  isDev: false,
-
-  envVars: {
-    __PROD__: false,
-    __TEST__: false,
-    __DEV__: false,
-  },
-
-  appPackageJson: {},
-
-  configPath: '',
-
-  cacheDirPath: '',
-
-  defaultIndexPath: '',
-
-  defaultDistPath: '',
-
-  assetsDir: 'assets',
-}
-
-export function getMsfwContext() {
-  return _msfwcontext
-}
-
-function getDefaultIndexPath() {
+function getIndexPath() {
   let indexPath = ''
   if (isProjectFileExist('src/index.ts')) {
     indexPath = resolveProject('src/index.ts')
@@ -43,38 +16,59 @@ function getDefaultIndexPath() {
   return indexPath
 }
 
-export function initMsfwContext(mode: 'development' | 'production', options: Options) {
-  _msfwcontext.options = options
+export function createMsfwContext(options: Options, mode: 'development' | 'production' | '' = '') {
   // 开发模式
-  _msfwcontext.isDev = mode === 'development' ? true : false
+  const isDev = mode === 'development' ? true : false
   // 环境参数
-  const envVars = _msfwcontext.envVars
-  switch (options.env) {
-    case 'prod':
-      envVars.__PROD__ = true
-      break
-    case 'test':
-      envVars.__TEST__ = true
-      break
-    case 'dev':
-      envVars.__DEV__ = true
-      break
-    default:
-      break
+  const envVars = {
+    __PROD__: options.env === 'prod' ? true : false,
+    __TEST__: options.env === 'test' ? true : false,
+    __DEV__: options.env === 'dev' ? true : false,
   }
-  // 项目Package
+  // 项目PackageJson
+  let appPackageJson = {}
   const appPackageFile = resolveProject('package.json')
   if (fs.existsSync(appPackageFile)) {
-    _msfwcontext.appPackageJson = require(appPackageFile)
+    appPackageJson = require(appPackageFile)
   }
-  // 配置文件
-  _msfwcontext.configPath = getConfigPath(_msfwcontext)
+  // 项目配置文件
+  const configPath = getConfigPath(options.config)
   // 默认缓存目录
-  _msfwcontext.cacheDirPath = resolveProject('node_modules/.msfw-cache')
+  const cacheDirPath = resolveProject('node_modules/.msfw-cache')
   // 默认入口文件
-  _msfwcontext.defaultIndexPath = getDefaultIndexPath()
+  const appIndexPath = getIndexPath()
   // 默认输出目录
-  _msfwcontext.defaultDistPath = resolveProject('dist')
+  const appDistPath = resolveProject('dist')
+  // 默认src目录
+  const appSrcPath = resolveProject('src')
+  // 默认模板文件
+  const publicPath = resolveProject('public')
+  let appFaviconPath = path.join(publicPath, 'favicon.ico')
+  appFaviconPath = fs.existsSync(appFaviconPath)
+    ? appFaviconPath
+    : path.join(__dirname, '../../template/public/favicon.ico')
+  let appTemplatePath = path.join(publicPath, 'index.html')
+  appTemplatePath = fs.existsSync(appTemplatePath)
+    ? appTemplatePath
+    : path.join(__dirname, '../../template/public/index.html')
+  // tsconfig文件
+  const appTsconfigPath = resolveProject('tsconfig.json')
 
-  return _msfwcontext
+  const context: MsfwContext = {
+    options: options,
+    isDev,
+    envVars,
+    appPackageJson,
+    configPath,
+    cacheDirPath,
+    assetsDir: 'assets',
+    appIndexPath,
+    appDistPath,
+    appSrcPath,
+    appFaviconPath,
+    appTemplatePath,
+    appTsconfigPath,
+  }
+
+  return context
 }
