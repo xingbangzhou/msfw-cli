@@ -12,7 +12,15 @@
   },
   "devDependencies": {
     "@msfw/cli": "workspace:^",
-    "@msfw/tsconfig": "workspace:^",
-    "@types/node": "^22.5.0"
+    "@msfw/tsconfig": "workspace:^"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.25.4",
+    "@types/react": "^18.3.4",
+    "@types/react-dom": "^18.3.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router": "^6.26.1",
+    "react-router-dom": "^6.26.1"
   }
 }
