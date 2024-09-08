@@ -1,8 +1,8 @@
-import {MsfwBigName, MsfwVersion} from './lib/constants'
+import {logTitle} from './lib/logger'
 import type {Options} from './types'
 
 const msfw = async (cmd: string, options: Options) => {
-  console.log(`${MsfwBigName} v${MsfwVersion} begin with command: ${cmd}\n`)
+  logTitle(`begin with command: ${cmd}`)
 
   // 执行脚本
   switch (cmd) {

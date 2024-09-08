@@ -2,11 +2,9 @@
 
 import {program} from 'commander'
 import msfw from '..'
-import path from 'path'
+import {MsfwVersion} from '../lib/constants'
 
-const packageJson = require(`${path.resolve(__dirname, '../../')}/package.json`)
-
-program.version(packageJson.version, '-v, --version').usage('<command> [options]')
+program.version(MsfwVersion, '-v, --version').usage('<command> [options]')
 
 program
   .command('dev')
