@@ -1,3 +1,4 @@
+import toUpper from 'lodash/toUpper'
 import mergeWith from 'lodash/mergeWith'
 
 export function isFunction(value: any): value is (...args: any[]) => any {
@@ -22,4 +23,11 @@ export function deepMergeWidthArray(dest: any, ...src: any) {
       return x.concat(y)
     }
   })
+}
+
+export function toUpperCase(value: string) {
+  if (value.toUpperCase) {
+    return value.toUpperCase()
+  }
+  return toUpper(value)
 }

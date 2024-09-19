@@ -1,7 +1,7 @@
 import path from 'path'
 
-export const MsfwName = 'msfw'
+export const MSFWNAME = 'msfw'
 
-export const MsfwBigName = 'MSFW'
+const msfwPackageJson = require(`${path.resolve(__dirname, '../../')}/package.json`)
 
-export const MsfwVersion = require(`${path.resolve(__dirname, '../../')}/package.json`).version
+export const MSFWVERSION = msfwPackageJson.version

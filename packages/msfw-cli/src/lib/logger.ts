@@ -1,5 +1,6 @@
 import chalk from 'chalk'
-import {MsfwBigName, MsfwVersion} from './constants'
+import {MSFWNAME, MSFWVERSION} from './constants'
+import {toUpperCase} from './utils'
 
 export function log(...params: any[]) {
   console.log(...params)
@@ -11,6 +12,6 @@ export function logError(...params: any[]) {
 
 export function logTitle(title: string) {
   console.log(
-    `${chalk.cyan.bgHex('#FFA500').bold(` ${MsfwBigName} v${MsfwVersion} `)} ${chalk.bgHex('#0969da')(` ${title} `)} \n`,
+    `${chalk.cyan.bgHex('#FFA500').bold(` ${toUpperCase(MSFWNAME)} v${MSFWVERSION} `)} ${chalk.bgHex('#0969da')(` ${title} `)} \n`,
   )
 }

@@ -1,12 +1,11 @@
 import {cosmiconfigSync} from 'cosmiconfig'
 import {TypeScriptLoader} from 'cosmiconfig-typescript-loader'
 import {MsfwContext} from '../types'
-import {deepMergeWidthArray, isFunction, isString} from './utils'
-import path from 'path'
-import {projectRoot} from './paths'
+import {deepMergeWidthArray, isFunction, isString, toUpperCase} from './utils'
+import {appDirectory, resolveApp} from './paths'
 import {log} from './logger'
 import type {MsfwConfig} from '../types/config'
-import {MsfwName, MsfwBigName} from './constants'
+import {MSFWNAME} from './constants'
 
 const DEFAULT_CONFIG: MsfwConfig = {
   devServer: {
@@ -17,8 +16,8 @@ const DEFAULT_CONFIG: MsfwConfig = {
   },
 }
 
-const explorer = cosmiconfigSync(MsfwName, {
-  searchPlaces: [`${MsfwName}.config.ts`, `${MsfwName}.config.js`, `${MsfwName}.config.cjs`],
+const explorer = cosmiconfigSync(MSFWNAME, {
+  searchPlaces: [`${MSFWNAME}.config.ts`, `${MSFWNAME}.config.js`, `${MSFWNAME}.config.cjs`],
   loaders: {
     '.ts': TypeScriptLoader(),
   },
@@ -26,12 +25,12 @@ const explorer = cosmiconfigSync(MsfwName, {
 
 export function getConfigPath(config?: string) {
   if (config && isString(config)) {
-    return path.resolve(projectRoot, config)
+    return resolveApp(config)
   } else {
-    const result = explorer.search(projectRoot)
+    const result = explorer.search(appDirectory)
     if (result === null) {
       log(
-        `${MsfwBigName}: Config file not found. check if file exists at root (${MsfwName}.config.ts, ${MsfwName}.config.js)`,
+        `${toUpperCase(MSFWNAME)}: Config file not found. check if file exists at root (${MSFWNAME}.config.ts, ${MSFWNAME}.config.js)`,
       )
       return ''
     }
@@ -41,7 +40,7 @@ export function getConfigPath(config?: string) {
 }
 
 function getConfigAsObject(context: MsfwContext): MsfwConfig {
-  const configFilePath = context.configPath
+  const configFilePath = context.appConfig
   const result = explorer.load(configFilePath)
 
   const config = isFunction(result?.config) ? result.config(context) : result?.config

@@ -6,7 +6,7 @@ export default class WpBabel {
   setup(webpackChain: WebpackChain) {
     const ctx = webpackChain.context
     const isDev = ctx.isDev
-    const reactVersion = ctx.appPackageJson?.dependencies?.react
+    const reactVersion = ctx.appPackageObj?.dependencies?.react
 
     const babelRule = this.getBabelRule(isDev, reactVersion)
 

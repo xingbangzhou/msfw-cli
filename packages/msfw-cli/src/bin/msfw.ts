@@ -2,9 +2,9 @@
 
 import {program} from 'commander'
 import msfw from '..'
-import {MsfwVersion} from '../lib/constants'
+import {MSFWVERSION} from '../lib/constants'
 
-program.version(MsfwVersion, '-v, --version').usage('<command> [options]')
+program.version(MSFWVERSION, '-v, --version').usage('<command> [options]')
 
 program
   .command('dev')

@@ -1,5 +1,5 @@
 import type {Configuration} from 'webpack'
-import {resolveProject} from '../../paths'
+import {resolveApp} from '../../paths'
 import {WebpackChain} from './webpack-config'
 
 export class WpCommon {
@@ -11,28 +11,28 @@ export class WpCommon {
     const target: Configuration['target'] = ['web', 'es5']
     // cache
     const buildDependenciesConfigs = [__filename]
-    const configPath = ctx.configPath
+    const configPath = ctx.appConfig
     if (configPath) {
       buildDependenciesConfigs.push(configPath)
     }
-    const name = `${isDev ? 'development' : ''}-${ctx.appPackageJson.version}-${options?.env}`
+    const name = `${isDev ? 'development' : ''}-${ctx.appPackageObj?.version}-${options?.env}`
     const cache: Configuration['cache'] = {
       name: name,
       type: 'filesystem',
-      cacheDirectory: ctx.cacheDirPath,
+      cacheDirectory: ctx.appCache,
       buildDependencies: {
         config: buildDependenciesConfigs,
       },
     }
     // entry
     const entry: Configuration['entry'] = {
-      index: ctx.appIndexPath,
+      index: ctx.appIndexJs,
     }
     // output
-    const assetsDir = ctx.assetsDir
+    const assetsDir = 'assets'
     const output: Configuration['output'] = {
       clean: true,
-      path: ctx.appDistPath,
+      path: ctx.appBuild,
       publicPath: 'auto',
       filename: `${assetsDir}/js/[name].[contenthash:8].js`,
       assetModuleFilename: `${assetsDir}/[name].[contenthash:8][ext][query]`,
@@ -47,9 +47,9 @@ export class WpCommon {
       },
     }
     // resolve
-    const srcPath = ctx.appSrcPath
+    const srcPath = ctx.appSrc
     const resolve: Configuration['resolve'] = {
-      modules: ['node_modules', resolveProject('node_modules'), srcPath],
+      modules: ['node_modules', resolveApp('node_modules'), srcPath],
       alias: {
         src: srcPath,
       },

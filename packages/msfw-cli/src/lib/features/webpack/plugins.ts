@@ -1,15 +1,16 @@
 import {Configuration, container, DefinePlugin} from 'webpack'
 import {WebpackChain} from './webpack-config'
 import Dotenv from 'dotenv-webpack'
-import {projectRoot, resolveProject} from '../../paths'
+import {appDirectory, resolveApp} from '../../paths'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
-import {MsfwBigName} from '../../constants'
+import {MSFWNAME} from '../../constants'
 import WebpackBar from 'webpackbar'
 import {BundleAnalyzerPlugin} from 'webpack-bundle-analyzer'
 import fs from 'fs'
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 import EslintWebpackPlugin from 'eslint-webpack-plugin'
 import path from 'path'
+import {toUpperCase} from '../../utils'
 
 export default class WpPlugins {
   setup(webpackChain: WebpackChain) {
@@ -23,7 +24,7 @@ export default class WpPlugins {
     const plugins: Configuration['plugins'] = [
       // dotenv
       new Dotenv({
-        path: resolveProject(`.env${buildEnv ? '.' + buildEnv : ''}`),
+        path: resolveApp(`.env${buildEnv ? '.' + buildEnv : ''}`),
         safe: true, // load '.env.example' to verify the '.env' variables are all set. Can also be a string to a different file.
         allowEmptyValues: true, // allow empty variables (e.g. `FOO=`) (treat it as empty string, rather than missing)
         systemvars: true, // load all the predefined 'process.env' variables which will trump anything local per dotenv specs.
@@ -34,9 +35,8 @@ export default class WpPlugins {
       new DefinePlugin(defineOptions),
       // html
       new HtmlWebpackPlugin({
-        title: MsfwBigName,
-        template: ctx.appTemplatePath,
-        favicon: ctx.appFaviconPath,
+        title: toUpperCase(MSFWNAME),
+        template: ctx.appHtml,
         files: {
           css: [],
           js: [],
@@ -63,7 +63,7 @@ export default class WpPlugins {
     if (options.progress) {
       plugins.push(
         new WebpackBar({
-          name: `[${MsfwBigName}]`,
+          name: `[${toUpperCase(MSFWNAME)}]`,
           color: 'green',
           profile: true,
         }),
@@ -79,7 +79,7 @@ export default class WpPlugins {
       )
     }
     // ts/eslint
-    const tsconfigPath = ctx.appTsconfigPath
+    const tsconfigPath = ctx.appTsConfig
     const isTs = fs.existsSync(tsconfigPath)
     if (isTs) {
       plugins.push(
@@ -96,10 +96,10 @@ export default class WpPlugins {
       plugins.push(
         new EslintWebpackPlugin({
           extensions: ['js', 'mjs', 'jsx', 'ts', 'tsx'],
-          context: projectRoot,
+          context: ctx.appPath,
           files: ['src/**/*.{ts,tsx,js,jsx}'],
           cache: true,
-          cacheLocation: path.resolve(ctx.cacheDirPath, 'eslint'),
+          cacheLocation: path.resolve(ctx.appCache, 'eslint'),
           fix: true,
           threads: true,
           lintDirtyModulesOnly: false,

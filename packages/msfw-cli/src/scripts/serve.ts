@@ -10,7 +10,7 @@ import {ip} from 'address'
 import {gateway4sync} from 'default-gateway'
 import path from 'path'
 import fs from 'fs-extra'
-import {resolveProject} from '../lib/paths'
+import {resolveApp} from '../lib/paths'
 import https from 'https'
 
 function formatUrl(protocol: string, host: string, port: number, pathname = '/') {
@@ -87,7 +87,7 @@ export default async function serve(options: Options) {
   const app = express()
   app.use(compression())
   app.use(cors())
-  const staticRoot = msfwContext.appDistPath
+  const staticRoot = msfwContext.appBuild
   app.use(express.static(staticRoot))
   const html = await fs.readFile(path.join(staticRoot, 'index.html'), 'utf8')
   app.get('*', (req, res) => res.send(html))
@@ -95,7 +95,7 @@ export default async function serve(options: Options) {
   const devServer = msfwConfig.devServer as any
   const {host, port} = devServer
   const httpsOptions = devServer.https
-  const publicPath = resolveProject('public')
+  const publicPath = msfwContext.appPublic
   if (httpsOptions) {
     const httpsServer = https.createServer(httpsOptions, app)
     httpsServer.listen(port, () => {

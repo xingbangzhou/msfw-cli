@@ -2,7 +2,6 @@ import {Configuration} from 'webpack'
 import {WebpackChain} from './webpack-config'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin'
-import {resolveProject} from '../../paths'
 
 const cssRegex = /\.css$/
 const cssModuleRegex = /\.module\.css$/
@@ -13,7 +12,6 @@ export default class WpStyle {
   setup(webpackChain: WebpackChain) {
     const ctx = webpackChain.context
     const isDev = ctx.isDev
-    const assetsDir = ctx.assetsDir
 
     const localIdentName = isDev ? '[path][name]-[local]-[hash:base64:5]' : '[local]-[hash:base64:5]'
 
@@ -83,8 +81,8 @@ export default class WpStyle {
       config.plugins = [
         new MiniCssExtractPlugin({
           ignoreOrder: true,
-          filename: `${assetsDir}/css/[name].[contenthash:8].css`,
-          chunkFilename: `${assetsDir}/css/[name].[contenthash:8].chunk.css`,
+          filename: `assets/css/[name].[contenthash:8].css`,
+          chunkFilename: `assets/css/[name].[contenthash:8].chunk.css`,
         }),
       ]
     }
@@ -103,27 +101,7 @@ export default class WpStyle {
         options: {
           modules: modules
             ? {
-                // mode: 'local',
-                // auto: true,
-                // exportGlobals: true,
                 localIdentName,
-                // localIdentContext: resolveProject('src'),
-                // localIdentHashSalt: 'my-custom-hash',
-                // namedExport: false,
-                // getJSON: ({
-                //   resourcePath,
-                //   imports,
-                //   exports,
-                //   replacements,
-                // }: {
-                //   resourcePath: string
-                //   imports: object[]
-                //   exports: object[]
-                //   replacements: object[]
-                // }) => {
-                //   console.log('ffffffffffff')
-                //   console.log({resourcePath, imports, exports, replacements})
-                // },
               }
             : modules,
         },
