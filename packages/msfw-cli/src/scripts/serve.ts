@@ -7,10 +7,9 @@ import cors from 'cors'
 import url from 'url'
 import chalk from 'chalk'
 import {ip} from 'address'
-import {gateway4sync} from 'default-gateway'
+import defaultGateway from 'default-gateway'
 import path from 'path'
 import fs from 'fs-extra'
-import {resolveApp} from '../lib/paths'
 import https from 'https'
 
 function formatUrl(protocol: string, host: string, port: number, pathname = '/') {
@@ -37,8 +36,8 @@ function formatUrl(protocol: string, host: string, port: number, pathname = '/')
     prettyHost = 'localhost'
     try {
       // This can only return an IPv4 address
-      const gw4 = gateway4sync()
-      lanUrlForConfig = gw4.int ? ip(gw4.int) : null
+      const gw4 = defaultGateway.v4.sync()
+      lanUrlForConfig = ip(gw4 && gw4.interface)
       if (lanUrlForConfig) {
         // Check if the address is a private ip
         // https://en.wikipedia.org/wiki/Private_network#Private_IPv4_address_spaces
@@ -87,8 +86,10 @@ export default async function serve(options: Options) {
   const app = express()
   app.use(compression())
   app.use(cors())
+
   const staticRoot = msfwContext.appBuild
   app.use(express.static(staticRoot))
+
   const html = await fs.readFile(path.join(staticRoot, 'index.html'), 'utf8')
   app.get('*', (req, res) => res.send(html))
 

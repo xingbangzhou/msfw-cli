@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "plugins": [{ "transform": "ts-transform-paths", "after": true }],
+    "types": ["webpack/module"],
+    "target": "ESNext",
     "module": "commonjs",
+    "moduleResolution": "node",
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -9,7 +12,6 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "moduleResolution": "node",
     "downlevelIteration": true,
     "declaration": true,
     "noEmit": false,
