@@ -1,29 +1,8 @@
 import type {Configuration as WebpackConfig} from 'webpack'
-import merge, {CustomizeRule, mergeWithRules} from 'webpack-merge'
-import type {Configure, MsfwConfig, MsfwContext, WebpackAlias} from '../../../types'
+import merge from 'webpack-merge'
+import type {Configure, MsfwConfig, MsfwContext, WebpackAlias, MsfwDevServerConfig} from '../../../types'
 import {log} from '../../logger'
 import {isFunction} from '../../utils'
-
-export class WebpackChain {
-  constructor(context: MsfwContext) {
-    this.context = context
-  }
-
-  readonly context: MsfwContext
-  config: WebpackConfig = {}
-
-  merge(cfg: WebpackConfig) {
-    this.config = mergeWithRules({
-      module: {
-        rules: {
-          test: CustomizeRule.Match,
-          loaders: CustomizeRule.Append,
-        },
-      },
-      plugins: CustomizeRule.Append,
-    })(this.config, cfg)
-  }
-}
 
 function addAlias(webpackConfig: WebpackConfig, webpackAlias: WebpackAlias) {
   if (webpackConfig.resolve) {

@@ -1,5 +1,5 @@
 import {Configuration} from 'webpack'
-import {WebpackChain} from './webpack-config'
+import WebpackChain from './webpack-chain'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin'
 

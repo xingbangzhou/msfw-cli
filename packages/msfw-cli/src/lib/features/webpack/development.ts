@@ -1,6 +1,6 @@
 import type {Configuration as DevServerConfiguration} from 'webpack-dev-server'
 import type {Configuration} from 'webpack'
-import {WebpackChain} from './webpack-config'
+import WebpackChain from './webpack-chain'
 
 export default class WpDevelopment {
   setup(webpackChain: WebpackChain) {

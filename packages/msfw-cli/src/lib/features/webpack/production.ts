@@ -1,4 +1,4 @@
-import {WebpackChain} from './webpack-config'
+import WebpackChain from './webpack-chain'
 import TerserPlugin from 'terser-webpack-plugin'
 
 export default class WpProduction {

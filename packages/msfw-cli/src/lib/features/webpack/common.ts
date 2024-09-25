@@ -1,6 +1,6 @@
 import type {Configuration} from 'webpack'
 import {resolveApp} from '../../paths'
-import {WebpackChain} from './webpack-config'
+import WebpackChain from './webpack-chain'
 
 export class WpCommon {
   setup(webpackChain: WebpackChain) {

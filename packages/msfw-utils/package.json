@@ -23,7 +23,8 @@
     "build:stable": "node ../../scripts/build.mjs stable",
     "build:types": "node ../../scripts/buildTypes.mjs",
     "build:copy-files": "node ../../scripts/copyFiles.mjs",
-    "prebuild": "rimraf dist tsconfig.build.tsbuildinfo"
+    "prebuild": "rimraf dist tsconfig.build.tsbuildinfo",
+    "release": "pnpm build && pnpm publish dist --access public --no-git-checks"
   },
   "devDependencies": {
     "@msfw/tsconfig": "workspace:^"

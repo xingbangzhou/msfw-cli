@@ -31,8 +31,8 @@ export default class MsfwSDK {
   async initEx<T extends MsfwExContext>(className: {new (): T}) {
     const ctx = new className()
     await ctx.ensure()
-    this._ctx = ctx
 
+    this._ctx = ctx
     this._ensureResolve?.(ctx)
     this._ensureResolve = undefined
 

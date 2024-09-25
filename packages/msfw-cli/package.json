@@ -22,13 +22,13 @@
     "msfw": "./dist/bin/msfw.js"
   },
   "files": [
-    "dist",
-    "template"
+    "dist"
   ],
   "scripts": {
     "dev": "rimraf dist && tspc -w",
     "build": "rimraf dist && tspc",
-    "prepack": "pnpm build"
+    "prepack": "pnpm build",
+    "release": "pnpm build && pnpm publish --access public --no-git-checks"
   },
   "dependencies": {
     "@babel/core": "^7.25.2",

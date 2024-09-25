@@ -1,5 +1,5 @@
 import {Configuration} from 'webpack'
-import {WebpackChain} from './webpack-config'
+import WebpackChain from './webpack-chain'
 
 export default class WpAssetModules {
   setup(WebpackChain: WebpackChain) {

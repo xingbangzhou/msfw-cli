@@ -3,10 +3,11 @@ import WpAssetModules from './asset-modules'
 import WpBabel from './babel'
 import {WpCommon} from './common'
 import WpDevelopment from './development'
+import {mergeWebpackConfig} from './merge-config'
 import WpPlugins from './plugins'
 import WpProduction from './production'
 import WpStyle from './style'
-import {WebpackChain} from './webpack-config'
+import WebpackChain from './webpack-chain'
 
 function overrideWebpack(context: MsfwContext) {
   const webpackChain = new WebpackChain(context)
@@ -31,7 +32,9 @@ export function overrideWebpackDev(context: MsfwContext, msfwConfig: MsfwConfig)
     })
   }
 
-  return webpackChain.config
+  const webpackConfig = webpackChain.config
+
+  return mergeWebpackConfig(msfwConfig, webpackConfig, context)
 }
 
 export function overrideWebpackProd(context: MsfwContext, msfwConfig: MsfwConfig) {
@@ -39,5 +42,7 @@ export function overrideWebpackProd(context: MsfwContext, msfwConfig: MsfwConfig
 
   new WpProduction().setup(webpackChain)
 
-  return webpackChain.config
+  const webpackConfig = webpackChain.config
+
+  return mergeWebpackConfig(msfwConfig, webpackConfig, context)
 }

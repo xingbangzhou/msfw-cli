@@ -1,5 +1,5 @@
 import {Configuration, RuleSetRule} from 'webpack'
-import {WebpackChain} from './webpack-config'
+import WebpackChain from './webpack-chain'
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
 
 export default class WpBabel {
