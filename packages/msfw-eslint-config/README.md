@@ -1,12 +1,12 @@
 # Eslint React
 
 ## Install
-+ `pnpm add @msfw/eslintrc -D`
++ `pnpm add @msfw/eslint-config -D`
 
 ## Config
 + `.eslintrc.js`
 ```js
 module.exports = {
-  "extends": ["@msfw/eslintrc"]
+  "extends": ["@msfw/eslint-config"]
 }
 ```

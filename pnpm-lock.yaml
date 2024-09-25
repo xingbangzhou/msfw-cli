@@ -35,9 +35,9 @@ importers:
       '@commitlint/config-conventional':
         specifier: ^19.2.2
         version: 19.2.2
-      '@msfw/eslintrc':
+      '@msfw/eslint-config':
         specifier: workspace:^
-        version: link:packages/msfw-eslintrc
+        version: link:packages/msfw-eslint-config
       '@types/node':
         specifier: ^22.5.1
         version: 22.5.4
@@ -223,7 +223,7 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0
 
-  packages/msfw-eslintrc:
+  packages/msfw-eslint-config:
     dependencies:
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.16.0
@@ -313,6 +313,8 @@ importers:
   packages/msfw-utils/dist/Logger: {}
 
   packages/msfw-utils/dist/codecs: {}
+
+  packages/msfw-utils/dist/constants: {}
 
   packages/msfw-utils/dist/shims: {}
 
