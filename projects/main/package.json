@@ -20,8 +20,6 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.25.4",
-    "@msfw/utils": "workspace:^",
-    "@msfw/framework": "workspace:^",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router": "^6.26.1",

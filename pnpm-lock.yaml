@@ -250,87 +250,17 @@ importers:
         specifier: ^3.1.1
         version: 3.3.3
 
-  packages/msfw-framework:
-    devDependencies:
-      '@msfw/tsconfig':
-        specifier: workspace:^
-        version: link:../msfw-tsconfig
-      '@msfw/utils':
-        specifier: workspace:^
-        version: link:../msfw-utils/dist
-
-  packages/msfw-framework/dist:
-    dependencies:
-      '@msfw/utils':
-        specifier: '>=1.0.0'
-        version: link:../../msfw-utils/dist
-
-  packages/msfw-framework/dist/Framework: {}
-
-  packages/msfw-framework/dist/Module: {}
-
-  packages/msfw-framework/dist/types: {}
-
-  packages/msfw-framework/dist/utils: {}
-
-  packages/msfw-msdk:
-    devDependencies:
-      '@msfw/tsconfig':
-        specifier: workspace:^
-        version: link:../msfw-tsconfig
-      '@msfw/utils':
-        specifier: workspace:^
-        version: link:../msfw-utils/dist
-
-  packages/msfw-msdk/dist:
-    dependencies:
-      '@msfw/utils':
-        specifier: '>=1.0.0'
-        version: link:../../msfw-utils/dist
-
-  packages/msfw-msdk/dist/ExContext: {}
-
-  packages/msfw-msdk/dist/MsfwSDK: {}
-
   packages/msfw-tsconfig:
     devDependencies:
       typescript-plugin-css-modules:
         specifier: ^5.1.0
         version: 5.1.0(typescript@5.6.2)
 
-  packages/msfw-utils:
-    devDependencies:
-      '@msfw/tsconfig':
-        specifier: workspace:^
-        version: link:../msfw-tsconfig
-
-  packages/msfw-utils/dist: {}
-
-  packages/msfw-utils/dist/EventEmitter: {}
-
-  packages/msfw-utils/dist/EventService: {}
-
-  packages/msfw-utils/dist/Logger: {}
-
-  packages/msfw-utils/dist/codecs: {}
-
-  packages/msfw-utils/dist/constants: {}
-
-  packages/msfw-utils/dist/shims: {}
-
-  packages/msfw-utils/dist/types: {}
-
   projects/main:
     dependencies:
       '@babel/runtime':
         specifier: ^7.25.4
         version: 7.25.4
-      '@msfw/framework':
-        specifier: workspace:^
-        version: link:../../packages/msfw-framework/dist
-      '@msfw/utils':
-        specifier: workspace:^
-        version: link:../../packages/msfw-utils/dist
       react:
         specifier: ^18.3.1
         version: 18.3.1
