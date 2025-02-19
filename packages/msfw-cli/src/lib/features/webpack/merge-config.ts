@@ -1,6 +1,6 @@
 import type {Configuration as WebpackConfig} from 'webpack'
 import merge from 'webpack-merge'
-import type {Configure, MsfwConfig, MsfwContext, WebpackAlias, MsfwDevServerConfig} from '../../../types'
+import type {Configure, MsfwConfig, MsfwContext, WebpackAlias} from '../../../types'
 import {log} from '../../logger'
 import {isFunction} from '../../utils'
 
