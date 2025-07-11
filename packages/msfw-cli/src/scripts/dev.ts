@@ -11,7 +11,38 @@ export default function dev(options: Options) {
 
   const webpackConfig = overrideWebpackDev(msfwContext, msfwConfig)
 
-  const compiler = webpack(webpackConfig)
+  const compiler = webpack(webpackConfig, (err, status) => {
+    if (err) {
+      console.error(err.stack || err)
+      return
+    }
+    if (status?.hasWarnings()) {
+      console.log(
+        status.toString({
+          all: false,
+          colors: true,
+          warnings: true,
+        }),
+      )
+    }
+    if (status?.hasErrors()) {
+      console.log(
+        status.toString({
+          all: false,
+          colors: true,
+          errors: true,
+        }),
+      )
+      process.exit(1)
+    }
+    console.log(
+      status?.toString({
+        all: false,
+        colors: true,
+        assets: true,
+      }),
+    )
+  })
 
   const server = new WebpackDevServer(webpackConfig.devServer, compiler)
   server.start()

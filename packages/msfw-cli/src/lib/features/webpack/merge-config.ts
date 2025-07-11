@@ -22,7 +22,7 @@ function giveTotalControl(
     webpackConfig = configureWebpack(webpackConfig, context)
 
     if (!webpackConfig) {
-      throw new Error("craco: 'webpack.configure' function didn't returned a webpack config object.")
+      throw new Error("msfw-cli: 'webpack.configure' function didn't returned a webpack config object.")
     }
   } else {
     webpackConfig = merge(webpackConfig, configureWebpack)
