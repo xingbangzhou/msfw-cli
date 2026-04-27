@@ -8,6 +8,8 @@ import type {MsfwConfig} from '../types/config'
 import {MSFWNAME} from './constants'
 
 const DEFAULT_CONFIG: MsfwConfig = {
+  builder: 'webpack',
+  transpiler: 'babel',
   devServer: {
     host: '0.0.0.0',
     port: 3000,
